@@ -74,6 +74,8 @@ __excp:	.word __e0_, __e1_, __e2_, __e3_, __e4_, __e5_, __e6_, __e7_, __e8_, __e
 s1:	.word 0
 s2:	.word 0
 s3: .word 0
+s4: .word 0
+s5: .word 0
 
 
 # This is the exception handler code that the processor runs when
@@ -148,24 +150,25 @@ ok_pc:
 # Don't skip instruction at EPC since it has not executed.
 
 interrupt:
-	la $a0 CaseIntr
 	sw $31 s3
+	la $a0 CaseIntr
 	jalr $a0
 	lw $31 s3
 	j Return
 	
 trapHandler:
-	sw $31 s3
+	sw $31 s4
 	la $v0 trapRoutine
-	jr $v0
-	lw $31 s3
+	jalr $v0
+	lw $31 s4
 	j Return
 	
 breakHandler:
-	sw $31 s3
+	sw $31 s5
 	la $v0, breakRoutine
 	jalr $v0
-	lw $31 s3
+	lw $31 s5
+	j Return
 
 ret:
 # Return from (non-interrupt) exception. Skip offending instruction

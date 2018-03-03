@@ -149,21 +149,21 @@ timeIntr:
 	mtc0 $0, $9			#limpia registro count
 	
 	lw $s3, seconds
-	addi $s3,$s3,1
+	addi $s3,$s3,1		#aumenta los segundos
 	sw $s3 seconds
-	ble $s3,59,count
+	ble $s3,59,count	#si es menor que 59 cuento sino restauro segundos a 0 y aumento minutos
 	sw $0,seconds
 	
 	lw $s1,minutes
-	addi $s1,$s1,1
+	addi $s1,$s1,1		#aumenta los minutos
 	sw $s1 minutes
-	ble $s1,59,count
+	ble $s1,59,count	#si son 59 o menos cuenta sino pone minutos a 0 y aumenta horas
 	sw $0,minutes
 	
 	lw $s2, hour
-	addi $s2,$s2,1
+	addi $s2,$s2,1		#aumenta las horas
 	sw $s2, hour
-	ble $s2,23,count
+	ble $s2,23,count	#si son 23 o menos cuenta sino restaura a 0
 	sw $0,hour
 	
 	jr $31
@@ -236,36 +236,36 @@ count:
 showClock:
 	li $v0,4 
 	la $a0,s9
-	syscall
+	syscall					#muestra "\nLa hora local es: "
 	
 	lw $s3, hour
 	li $v0 1
 	move $a0 $s3
-	syscall
+	syscall					#muestra la hora
 	
 	li $v0 4
 	la $a0 s12
-	syscall
+	syscall					#muestra ":"
 	
 	lw $s3, minutes
 	li $v0 1
 	move $a0 $s3
-	syscall
+	syscall					#muestra minutos
 	
 	li $v0 4
 	la $a0 s12
-	syscall
+	syscall					#muestra ":"
 	
 	lw $s3, seconds
 	li $v0 1
 	move $a0 $s3
-	syscall
+	syscall					#muestra segundos
 	
 	li $v0 4
 	la $a0 s14
-	syscall
+	syscall					#salto de linea "\n"
 	
-	li $s0 0	#restauro a 0 el contador de segundos
+	li $s0 0				#restauro a 0 el contador de segundos
 	
 	jr $31
 	
@@ -297,6 +297,6 @@ breakRoutine:
 	li $v0, 4
 	la $a0, breakSentence
 	syscall
-	
+
 end:
-	nop
+	nop						#non-instruction, para la ejecucion
